@@ -1,0 +1,55 @@
+
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Resources": {
+	"SGBase": {
+	    "Type": "AWS::EC2::SecurityGroup",
+	    "Properties": {
+		"GroupDescription": "Base Security Group",
+		"SecurityGroupIngress": [
+
+
+
+		    "ImageId" : "ami-81cefcfd"
+		    "KeyName" : "us-dev"
+		    "InstanceType" : "t2.nano"
+		    "Ec2SecurityGroup" : {
+			"Type" : "AWS::EC2::SecurityGroupIngress",
+			"Properties" : {
+			    "CidrIp" : String,
+			    "CidrIpv6" : String,
+			    "Description" : String,
+			    "FromPort" : Integer,
+			    "GroupId" : String,
+			    "GroupName" : String,
+			    "IpProtocol" : String,
+			    "SourceSecurityGroupName" : String,
+			    "SourceSecurityGroupId" : String,
+			    "SourceSecurityGroupOwnerId" : String,
+			    "ToPort" : Integer
+			}
+		    }
+    "Ec2Instance" : {
+	"Type" : "AWS::EC2::Instance",
+	"Properties" : {
+	    "ImageId" : { "Ref" : "ImageId" },
+	    "KeyName" : { "Ref" : "KeyName" },
+	    "InstanceType" : { "Ref" : "InstanceType" },
+	    "SecurityGroups" : [{ "Ref" : "Ec2SecurityGroup" }],
+	    "BlockDeviceMappings" : [
+		{
+		    "DeviceName" : "/dev/sda1",
+		    "Ebs" : { "VolumeSize" : "8" }
+		}
+	    ]
+	}
+    }
+
+    "IPAssoc" : {
+	"Type" : "AWS::EC2::EIPAssociation",
+	"Properties" : {
+	    "InstanceId" : { "Ref" : "Ec2Instance"},
+	    "EIP" : "existing Elastic IP address"
+	}
+    }
+		}
